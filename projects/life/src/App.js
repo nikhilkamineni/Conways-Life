@@ -4,7 +4,7 @@ import './App.css';
 
 const COLORS = [
   [0, 0, 0],
-  [0x8f, 0, 0x5f],
+  [255, 255, 255],
   [0x5f, 0, 0x8f],
   [0, 0, 0xff],
   [0, 0x5f, 0x7f],
@@ -25,13 +25,14 @@ class LifeCanvas extends Component {
     super(props);
 
     this.life = new Life(props.width, props.height);
-    this.life.randomize();
+    // this.life.randomize();
   }
 
   /**
    * Component did mount
    */
   componentDidMount() {
+    console.log(this);
     requestAnimationFrame(() => {
       this.animFrame();
     });
@@ -77,11 +78,27 @@ class LifeCanvas extends Component {
    */
   render() {
     return (
-      <canvas
-        ref="canvas"
-        width={this.props.width}
-        height={this.props.height}
-      />
+      <div>
+        <canvas
+          ref="canvas"
+          width={this.props.width}
+          height={this.props.height}
+        />
+        <button
+          onClick={() => {
+            this.life.clear();
+          }}
+        >
+          CLEAR
+        </button>
+        <button
+          onClick={() => {
+            this.life.randomize();
+          }}
+        >
+          RANDOMIZE
+        </button>
+      </div>
     );
   }
 }
