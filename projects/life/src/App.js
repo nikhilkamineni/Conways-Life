@@ -32,7 +32,6 @@ class LifeCanvas extends Component {
    * Component did mount
    */
   componentDidMount() {
-    console.log(this);
     requestAnimationFrame(() => {
       this.animFrame();
     });
@@ -97,6 +96,13 @@ class LifeCanvas extends Component {
           }}
         >
           RANDOMIZE
+        </button>
+        <button
+          onClick={() => {
+            this.life.glider();
+          }}
+        >
+          GLIDER
         </button>
       </div>
     );
