@@ -15,7 +15,7 @@ function Array2D(width, height) {
   return a;
 }
 
-const MODULO = 2;
+const MODULO = 4;
 
 /**
  * Life class
@@ -92,37 +92,37 @@ class Life {
 
       // West
       if (col > 0) {
-        if (currentBuffer[ row ][ col - 1 ] === 1) counter++;
+        if (currentBuffer[ row ][ col - 1 ] > 1) counter++;
       }
 
       // Northwest
       if (col > 0 && row > 0) {
-        if (currentBuffer[ row - 1 ][ col - 1 ] === 1) counter++;
+        if (currentBuffer[ row - 1 ][ col - 1 ] > 1) counter++;
       }
 
       // North
       if (row > 0) {
-        if (currentBuffer[ row - 1 ][ col ] === 1) counter++;
+        if (currentBuffer[ row - 1 ][ col ] > 1) counter++;
       }
 
       // Northeast
       if (row > 0 && col < this.width - 1) {
-        if (currentBuffer[ row - 1 ][ col + 1 ] === 1) counter++;
+        if (currentBuffer[ row - 1 ][ col + 1 ] > 1) counter++;
       }
 
       // East
       if (col < this.width - 1) {
-        if (currentBuffer[ row ][ col + 1 ] === 1) counter++;
+        if (currentBuffer[ row ][ col + 1 ] > 1) counter++;
       }
 
       // Southeast
       if (col < this.width - 1 && row < this.height - 1) {
-        if (currentBuffer[ row + 1 ][ col + 1 ] === 1) counter++;
+        if (currentBuffer[ row + 1 ][ col + 1 ] > 1) counter++;
       }
 
       // South
       if (row < this.height - 1) {
-        if (currentBuffer[ row + 1 ][ col ] === 1) counter++;
+        if (currentBuffer[ row + 1 ][ col ] > 1) counter++;
       }
 
       // Southwest
@@ -140,15 +140,38 @@ class Life {
 
         // Decide whether the cell lives or dies on next generation
         if (cell === 1) {
-          if (neighbors > 1 && neighbors < 4) {
+          if (neighbors < 2) {
             nextBuffer[ row ][ col ] = 1;
-          } else {
+          }
+          else if (neighbors < 4) {
+            nextBuffer[ row ][ col ] = 2;
+          } 
+          else if (neighbors < 5) {
+            nextBuffer[ row ][ col ] = 2;
+          } 
+          else if (neighbors < 6) {
+            nextBuffer[ row ][ col ] = 3;
+          } 
+          else {
             nextBuffer[ row ][ col ] = 0;
           }
         } else {
-          if (neighbors === 3) {
+          if (neighbors === 1) {
+            nextBuffer[ row ][ col ] = 0;
+          } 
+          else if (neighbors === 2) {
+            nextBuffer[ row ][ col ] = 0;
+          } 
+          else if (neighbors === 3) {
             nextBuffer[ row ][ col ] = 1;
-          } else {
+          } 
+          else if (neighbors === 4) {
+            nextBuffer[ row ][ col ] = 2;
+          }
+          else if (neighbors === 5) {
+            nextBuffer[ row ][ col ] = 3;
+          }
+          else {
             nextBuffer[ row ][ col ] = 0;
           }
         }

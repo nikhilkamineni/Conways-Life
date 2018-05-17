@@ -4,9 +4,9 @@ import './App.css';
 
 const COLORS = [
   [0, 0, 0],
-  [255, 255, 255],
-  [0x5f, 0, 0x8f],
-  [0, 0, 0xff],
+  [255, 0, 0],
+  [0, 255, 0],
+  [0, 0, 255],
   [0, 0x5f, 0x7f],
   [0x5f, 0x8f, 0x7f],
   [0x8f, 0xff, 0x7f],
@@ -112,7 +112,7 @@ class LifeApp extends Component {
   render() {
     return (
       <div>
-        <LifeCanvas width={400} height={300} />
+        <LifeCanvas width={500} height={500} />
       </div>
     );
   }
