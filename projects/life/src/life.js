@@ -60,7 +60,18 @@ class Life {
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        buffer[row][col] = Math.floor(Math.random() * MODULO);
+        if (row % 2 === 0) {
+          if (buffer[row][col - 1] === 1) buffer[row][col] = 2;
+          if (buffer[row][col - 1] === 2) buffer[row][col] = 3;
+          if (buffer[row][col - 1] === 3) buffer[row][col] = 4;
+          buffer[row][col] = Math.floor(Math.random() * MODULO - 2) + 2;
+        }
+        else if (row % 3 === 0) {
+          buffer[row][col] = Math.floor(Math.random() * MODULO);
+        }
+        else {
+          buffer[row][col] = 0;
+        }
       }
     }
   }
@@ -167,7 +178,9 @@ class Life {
       for (let col = 0; col < this.width; col++) {
         let cell = currentBuffer[row][col];
         // let neighbors = neighborCounter(row, col);
-        let neighbors = neighborCounter(row, col).slice(1).reduce((acc, curr) => acc + curr, 0);
+        let neighbors = neighborCounter(row, col)
+          .slice(1)
+          .reduce((acc, n) => acc + n);
         let color = 0;
 
         // If cell is alive...
@@ -179,17 +192,16 @@ class Life {
           else {
             color = 0;
           }
-        } 
-        else if (cell === 2) {
-          if (neighbors < 2) color = 0;
-          else if (neighbors < 3) color = 2;
-          else if (neighbors < 5) color = 1;
-          // else if (neighbors < 6) color = 2;
+        } else if (cell === 2) {
+          if (neighbors > 3) color = 2;
+          // else if (neighbors < 3) color = 2;
+          // else if (neighbors > 3) color = 1;
+          else if (neighbors > 4) color = 2;
+          else if (neighbors > 7) color = 0;
           else {
             color = 0;
           }
-        }
-        else if (cell === 3) {
+        } else if (cell === 3) {
           if (neighbors < 1) color = 3;
           // else if (neighbors < 4) color = 2;
           else if (neighbors < 5) color = 1;
