@@ -15,6 +15,8 @@ function Array2D(width, height) {
   return a;
 }
 
+const MODULO = 2;
+
 /**
  * Life class
  */
@@ -58,26 +60,24 @@ class Life {
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        buffer[ row ][ col ] = Math.floor(Math.random() * 2);
+        buffer[ row ][ col ] = Math.floor(Math.random() * MODULO);
       }
     }
   }
 
-  glider() {
-    // let nextIndex = this.currentIndex === 0 ? 1 : 0;
-    // let nextBuffer = this.buffers[ nextIndex ];
-    let nextBuffer = this.buffers[ this.currentIndex ];
-    let x = Math.floor(Math.random() * (this.width - 20)) + 10;
-    let y = Math.floor(Math.random() * (this.height - 20)) + 10;
-    console.log(nextBuffer)
-    console.log(x, y)
+  // glider() {
+  //   let nextBuffer = this.buffers[ this.currentIndex ];
+  //   let x = Math.floor(Math.random() * (this.width - 20)) + 10;
+  //   let y = Math.floor(Math.random() * (this.height - 20)) + 10;
+  //   console.log(nextBuffer)
+  //   console.log(x, y)
 
-    nextBuffer[x][y] = 1;
-    nextBuffer[x][y + 2] = 1;
-    nextBuffer[x - 1][y + 2] = 1;
-    nextBuffer[x + 1][y + 1] = 1;
-    nextBuffer[x + 1][y + 2] = 1;
-  }
+  //   nextBuffer[x][y] = 1;
+  //   nextBuffer[x][y + 2] = 1;
+  //   nextBuffer[x - 1][y + 2] = 1;
+  //   nextBuffer[x + 1][y + 1] = 1;
+  //   nextBuffer[x + 1][y + 2] = 1;
+  // }
 
   /**
    * Run the simulation for a single step

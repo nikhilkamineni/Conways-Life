@@ -97,13 +97,6 @@ class LifeCanvas extends Component {
         >
           RANDOMIZE
         </button>
-        <button
-          onClick={() => {
-            this.life.glider();
-          }}
-        >
-          GLIDER
-        </button>
       </div>
     );
   }
