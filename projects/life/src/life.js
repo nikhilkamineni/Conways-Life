@@ -9,7 +9,7 @@ function Array2D(width, height) {
   let a = new Array(height);
 
   for (let i = 0; i < height; i++) {
-    a[ i ] = new Array(width);
+    a[i] = new Array(width);
   }
 
   return a;
@@ -40,7 +40,7 @@ class Life {
    * This should NOT be modified by the caller
    */
   getCells() {
-    return this.buffers[ this.currentIndex ];
+    return this.buffers[this.currentIndex];
   }
 
   /**
@@ -48,7 +48,7 @@ class Life {
    */
   clear() {
     for (let row = 0; row < this.height; row++) {
-      this.buffers[ this.currentIndex ][ row ].fill(0);
+      this.buffers[this.currentIndex][row].fill(0);
     }
   }
 
@@ -56,11 +56,11 @@ class Life {
    * Randomize the life grid
    */
   randomize() {
-    let buffer = this.buffers[ this.currentIndex ];
+    let buffer = this.buffers[this.currentIndex];
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        buffer[ row ][ col ] = Math.floor(Math.random() * MODULO);
+        buffer[row][col] = Math.floor(Math.random() * MODULO);
       }
     }
   }
@@ -79,102 +79,138 @@ class Life {
   //   nextBuffer[x + 1][y + 2] = 1;
   // }
 
+  getVal(x, y) {
+    let currentBuffer = this.buffers[this.currentIndex];
+    return currentBuffer[x][y];
+  }
+
   /**
    * Run the simulation for a single step
    */
   step() {
     let nextIndex = this.currentIndex === 0 ? 1 : 0;
-    let currentBuffer = this.buffers[ this.currentIndex ];
-    let nextBuffer = this.buffers[ nextIndex ];
+    let currentBuffer = this.buffers[this.currentIndex];
+    let nextBuffer = this.buffers[nextIndex];
 
     const neighborCounter = (row, col) => {
+      let register = [0, 0, 0, 0];
       let counter = 0;
 
       // West
       if (col > 0) {
-        if (currentBuffer[ row ][ col - 1 ] > 1) counter++;
+        if (currentBuffer[row][col - 1] > 1) {
+          register[currentBuffer[row][col - 1]]++;
+          counter++;
+        }
       }
 
       // Northwest
       if (col > 0 && row > 0) {
-        if (currentBuffer[ row - 1 ][ col - 1 ] > 1) counter++;
+        if (currentBuffer[row - 1][col - 1] > 1) {
+          register[currentBuffer[row - 1][col - 1]]++;
+          counter++;
+        }
       }
 
       // North
       if (row > 0) {
-        if (currentBuffer[ row - 1 ][ col ] > 1) counter++;
+        if (currentBuffer[row - 1][col] > 1) {
+          register[currentBuffer[row - 1][col]]++;
+          counter++;
+        }
       }
 
       // Northeast
       if (row > 0 && col < this.width - 1) {
-        if (currentBuffer[ row - 1 ][ col + 1 ] > 1) counter++;
+        if (currentBuffer[row - 1][col + 1] > 1) {
+          register[currentBuffer[row - 1][col + 1]]++;
+          counter++;
+        }
       }
 
       // East
       if (col < this.width - 1) {
-        if (currentBuffer[ row ][ col + 1 ] > 1) counter++;
+        if (currentBuffer[row][col + 1] > 1) {
+          register[currentBuffer[row][col + 1]]++;
+          counter++;
+        }
       }
 
       // Southeast
       if (col < this.width - 1 && row < this.height - 1) {
-        if (currentBuffer[ row + 1 ][ col + 1 ] > 1) counter++;
+        if (currentBuffer[row + 1][col + 1] > 1) {
+          register[currentBuffer[row + 1][col + 1]]++;
+          counter++;
+        }
       }
 
       // South
       if (row < this.height - 1) {
-        if (currentBuffer[ row + 1 ][ col ] > 1) counter++;
+        if (currentBuffer[row + 1][col] > 1) {
+          register[currentBuffer[row + 1][col]]++;
+          counter++;
+        }
       }
 
       // Southwest
       if (row < this.height - 1 && col > 0) {
-        if (currentBuffer[ row + 1 ][ col - 1 ]) counter++;
+        if (currentBuffer[row + 1][col - 1]) {
+          register[currentBuffer[row + 1][col - 1]]++;
+          counter++;
+        }
       }
 
-      return counter;
+      return register;
     };
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        let cell = currentBuffer[ row ][ col ];
-        let neighbors = neighborCounter(row, col);
+        let cell = currentBuffer[row][col];
+        // let neighbors = neighborCounter(row, col);
+        let neighbors = neighborCounter(row, col).slice(1).reduce((acc, curr) => acc + curr, 0);
+        let color = 0;
 
-        // Decide whether the cell lives or dies on next generation
+        // If cell is alive...
         if (cell === 1) {
-          if (neighbors < 2) {
-            nextBuffer[ row ][ col ] = 1;
-          }
-          else if (neighbors < 4) {
-            nextBuffer[ row ][ col ] = 2;
-          } 
-          else if (neighbors < 5) {
-            nextBuffer[ row ][ col ] = 2;
-          } 
-          else if (neighbors < 6) {
-            nextBuffer[ row ][ col ] = 3;
-          } 
+          if (neighbors < 2) color = 1;
+          // else if (neighbors < 3) color = 2;
+          else if (neighbors < 4) color = 2;
+          // else if (neighbors < 4) color = 2;
           else {
-            nextBuffer[ row ][ col ] = 0;
+            color = 0;
           }
-        } else {
-          if (neighbors === 1) {
-            nextBuffer[ row ][ col ] = 0;
-          } 
-          else if (neighbors === 2) {
-            nextBuffer[ row ][ col ] = 0;
-          } 
-          else if (neighbors === 3) {
-            nextBuffer[ row ][ col ] = 1;
-          } 
-          else if (neighbors === 4) {
-            nextBuffer[ row ][ col ] = 2;
-          }
-          else if (neighbors === 5) {
-            nextBuffer[ row ][ col ] = 3;
-          }
+        } 
+        else if (cell === 2) {
+          if (neighbors < 2) color = 0;
+          else if (neighbors < 3) color = 2;
+          else if (neighbors < 5) color = 1;
+          // else if (neighbors < 6) color = 2;
           else {
-            nextBuffer[ row ][ col ] = 0;
+            color = 0;
           }
         }
+        else if (cell === 3) {
+          if (neighbors < 1) color = 3;
+          // else if (neighbors < 4) color = 2;
+          else if (neighbors < 5) color = 1;
+          // else if (neighbors < 6) color = 2;
+          else {
+            color = 0;
+          }
+        }
+        // If cell is dead...
+        else {
+          if (neighbors === 1) color = 0;
+          else if (neighbors === 2) color = 0;
+          else if (neighbors === 3) color = 1;
+          else if (neighbors === 4) color = 2;
+          else if (neighbors === 6) color = 3;
+          else {
+            color = 0;
+          }
+        }
+
+        nextBuffer[row][col] = color;
       }
     }
     // Switch the current buffer index for the next step
