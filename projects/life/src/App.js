@@ -5,7 +5,7 @@ import './App.css';
 const COLORS = [
   [0, 0, 0],
   [255, 0, 0],
-  [0, 255, 0],
+  [0, 180, 0],
   [0, 0, 255]
 ];
 
@@ -92,6 +92,13 @@ class LifeCanvas extends Component {
           }}
         >
           RANDOMIZE
+        </button>
+        <button
+          onClick={() => {
+            this.life.gliders();
+          }}
+        >
+          GLIDERS
         </button>
       </div>
     );

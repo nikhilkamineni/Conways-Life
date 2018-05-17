@@ -31,7 +31,8 @@ class Life {
     this.currentIndex = 0;
     this.buffers = [Array2D(width, height), Array2D(width, height)];
 
-    this.randomize();
+    this.clear();
+    // this.randomize();
   }
 
   /**
@@ -60,35 +61,25 @@ class Life {
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        if (row % 2 === 0) {
-          if (buffer[row][col - 1] === 1) buffer[row][col] = 2;
-          if (buffer[row][col - 1] === 2) buffer[row][col] = 3;
-          if (buffer[row][col - 1] === 3) buffer[row][col] = 4;
-          buffer[row][col] = Math.floor(Math.random() * MODULO - 2) + 2;
-        }
-        else if (row % 3 === 0) {
-          buffer[row][col] = Math.floor(Math.random() * MODULO);
-        }
-        else {
-          buffer[row][col] = 0;
-        }
+        buffer[row][col] = Math.floor(Math.random() * MODULO);
       }
     }
   }
 
-  // glider() {
-  //   let nextBuffer = this.buffers[ this.currentIndex ];
-  //   let x = Math.floor(Math.random() * (this.width - 20)) + 10;
-  //   let y = Math.floor(Math.random() * (this.height - 20)) + 10;
-  //   console.log(nextBuffer)
-  //   console.log(x, y)
+  gliders() {
+    for (let i = 0; i < 1000; i++) {
+      let buffer = this.buffers[this.currentIndex];
+      let row = Math.floor(Math.random() * (this.width - 20)) + 10;
+      let col = Math.floor(Math.random() * (this.height - 20)) + 10;
+      let color = Math.floor(Math.random() * MODULO - 1) + 1;
 
-  //   nextBuffer[x][y] = 1;
-  //   nextBuffer[x][y + 2] = 1;
-  //   nextBuffer[x - 1][y + 2] = 1;
-  //   nextBuffer[x + 1][y + 1] = 1;
-  //   nextBuffer[x + 1][y + 2] = 1;
-  // }
+      buffer[row][col] = color;
+      buffer[row][col + 2] = color;
+      buffer[row - 1][col + 2] = color;
+      buffer[row + 1][col + 1] = color;
+      buffer[row + 1][col + 2] = color;
+    }
+  }
 
   getVal(x, y) {
     let currentBuffer = this.buffers[this.currentIndex];
@@ -185,37 +176,21 @@ class Life {
 
         // If cell is alive...
         if (cell === 1) {
-          if (neighbors < 2) color = 1;
-          // else if (neighbors < 3) color = 2;
-          else if (neighbors < 4) color = 2;
-          // else if (neighbors < 4) color = 2;
-          else {
-            color = 0;
-          }
+          if (neighbors < 1) color = 0;
+          else if (neighbors > 1 && neighbors < 5) color = 1;
         } else if (cell === 2) {
-          if (neighbors > 3) color = 2;
-          // else if (neighbors < 3) color = 2;
-          // else if (neighbors > 3) color = 1;
-          else if (neighbors > 4) color = 2;
-          else if (neighbors > 7) color = 0;
-          else {
-            color = 0;
-          }
+          if (neighbors < 1) color = 0;
+          else if (neighbors > 1 && neighbors < 5) color = 2;
         } else if (cell === 3) {
-          if (neighbors < 1) color = 3;
-          // else if (neighbors < 4) color = 2;
-          else if (neighbors < 5) color = 1;
-          // else if (neighbors < 6) color = 2;
-          else {
-            color = 0;
-          }
+          if (neighbors < 1) color = 0;
+          else if (neighbors > 1 && neighbors < 4) color = 3;
         }
         // If cell is dead...
         else {
-          if (neighbors === 1) color = 0;
-          else if (neighbors === 2) color = 0;
-          else if (neighbors === 3) color = 1;
-          else if (neighbors === 4) color = 2;
+          if (neighbors > 2) color = Math.floor(Math.random() * MODULO - 1) + 1;
+          if (neighbors === 3) color = 2
+          // else if (neighbors === 3) color = 1;
+          // else if (neighbors === 5) color = 2;
           else if (neighbors === 6) color = 3;
           else {
             color = 0;
